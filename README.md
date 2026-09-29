@@ -4,6 +4,8 @@ Predicting the compressive strength of concrete (MPa) from its mix design and ag
 
 **Best model:** Gradient Boosting with engineering-based features, **test RMSE 5.20 MPa, R² 0.896**.
 
+**Try the live app:** https://concrete-strength-ml.streamlit.app
+
 ## Why this matters
 Compressive strength is the main property engineers use to specify and accept concrete, but it is normally measured by crushing cubes or cylinders after 7 to 28 days of curing. A model that estimates strength from the mix design can help screen mix designs early, before waiting for lab results.
 
@@ -32,10 +34,12 @@ Final evaluation on the held-out test set: **RMSE 5.20 MPa, R² 0.896**. Domain 
 ## Repository structure
 ```
 concrete-strength-ml/
+├── app/           Streamlit app (app.py)
 ├── data/          UCI dataset and its readme
 ├── models/        trained model (concrete_gb_model.joblib)
 ├── notebooks/     EDA and baseline modelling notebook
-├── app/           Streamlit app (coming soon)
+├── LICENSE
+├── README.md
 └── requirements.txt
 ```
 
