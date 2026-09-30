@@ -10,8 +10,14 @@ Predicting the compressive strength of concrete (MPa) from its mix design and ag
 Compressive strength is the main property engineers use to specify and accept concrete, but it is normally measured by crushing cubes or cylinders after 7 to 28 days of curing. A model that estimates strength from the mix design can help screen mix designs early, before waiting for lab results.
 
 ## Data
-[UCI Concrete Compressive Strength dataset](https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength) (I-Cheng Yeh): 1,030 laboratory tests with 8 inputs (cement, blast furnace slag, fly ash, water, superplasticizer, coarse aggregate, fine aggregate, age) and 1 target (compressive strength). After removing 25 duplicate rows, 1,005 tests remain.
 
+- **Source:** [Concrete Compressive Strength dataset](https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength), UCI Machine Learning Repository, donated by Prof. I-Cheng Yeh
+- **Dataset DOI:** [10.24432/C5PK67](https://doi.org/10.24432/C5PK67)
+- **Original study:** Yeh, I-C. (1998). Modeling of strength of high-performance concrete using artificial neural networks. *Cement and Concrete Research*, 28(12).
+- **Size:** 1,030 laboratory tests (1,005 after removing 25 duplicate rows), from 428 unique mix recipes
+- **Inputs:** cement, blast furnace slag, fly ash, water, superplasticizer, coarse aggregate and fine aggregate (all in kg/m³), plus curing age (days)
+- **Target:** compressive strength (MPa)
+- **Licence:** CC BY 4.0
 ## Approach
 - **Engineering-informed EDA:** the water–cement ratio correlates more strongly with strength (Spearman −0.50) than water alone (−0.28), consistent with Abrams' law.
 - **Leakage-safe validation:** the 1,005 tests come from only 428 unique mix recipes, many tested at several ages. Data is split by mix recipe, not by row, so no recipe appears in both training and test sets.
@@ -28,6 +34,17 @@ Compressive strength is the main property engineers use to specify and accept co
 | Random Forest | raw + domain | 6.28 |
 | Gradient Boosting | raw | 6.32 |
 | **Gradient Boosting** | **raw + domain** | **6.11** |
+## Comparison with Abrams' law
+
+To check whether ML adds value over a classic engineering formula, the model was compared with Abrams' law (1918), strength = A / B^(w/c), fitted on the same training data and evaluated on the same test set.
+
+| Model | Test RMSE (MPa) | Test R² |
+|---|---|---|
+| Abrams (w/c only) | 13.39 | 0.313 |
+| Abrams + log(age) | 11.59 | 0.485 |
+| Gradient boosting (final model) | **5.20** | **0.896** |
+
+Abrams' law captures the main trend, but the gradient boosting model cuts the error by about 55% compared with the best Abrams version, because it uses all the mix components and their interactions.
 
 Final evaluation on the held-out test set: **RMSE 5.20 MPa, R² 0.896**. Domain features cut the linear model's error by about 30%, showing the value of engineering knowledge in feature design.
 
